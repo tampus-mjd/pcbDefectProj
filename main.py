@@ -1,16 +1,16 @@
-import psutil
 import os
 import time
 import threading
 
 import tkinter as tk
+from tkinter import *
 from tkinter import ttk, messagebox
 
 from PIL import Image, ImageTk
 
 
 # variables
-isCameraOn = True
+isCameraOn = False
 
 
 # functions
@@ -41,7 +41,7 @@ def close_btn_msgbox():
 
 
 # Create and initialize the main application window
-root = tk.Tk()
+root = Tk()
 img = tk.PhotoImage(file="res/pcbDefect.png")
 root.minsize(1080, 600)
 root.resizable(False, False)
@@ -50,8 +50,8 @@ root.iconphoto(False, img)
 
 
 # Canvas
-cameraFeed = tk.Canvas(root, borderwidth=2, relief="solid", bg="gray", height=500, width=1000)
-cameraFeed.place(x=35, y=20)
+cameraFeed = tk.Canvas(root, borderwidth=2, relief="solid", bg="gray", height=580, width=1060)
+cameraFeed.place(x=5, y=5)
 
 
 # Camera Feed Placeholder
@@ -62,10 +62,12 @@ placeholder_camOff = ImageTk.PhotoImage(Image.open("res/camOff.png"))
 # adding image to feed
 display_feed(isCameraOn)
 
-
+"""
 # Toggle button
 btnCameraToggle = ttk.Button(root, text="Turn Camera OFF", command=update_label_text)
 btnCameraToggle.pack(side="bottom", pady=22.5)
+#
+"""
 
 
 # Close Button
