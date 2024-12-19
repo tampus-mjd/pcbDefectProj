@@ -1,56 +1,54 @@
 import os
 import time
 import threading
+import ctypes
 
 import tkinter as tk
 from tkinter import *
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, Menu
 
 from PIL import Image, ImageTk
-
 
 # variables
 isCameraOn = False
 
-
-# functions
-def update_label_text():
-    global isCameraOn
-
-    isCameraOn = not isCameraOn
-
-    if isCameraOn:
-        btnCameraToggle['text'] = "Turn Camera OFF"
-    else:
-        btnCameraToggle['text'] = "Turn Camera ON"
-
-    display_feed(isCameraOn)
-
-
-def display_feed(camera_state):
-
-    if camera_state == 1:
-        cameraFeed.create_image(4, 4, image=placeholder_camOn, anchor="nw")
-    else:
-        cameraFeed.create_image(4, 4, image=placeholder_camOff, anchor="nw")
-
-
-def close_btn_msgbox():
-    if messagebox.askyesno("Exit", "Do you want to exit?"):
-        root.destroy()
-
-
 # Create and initialize the main application window
 root = Tk()
-img = tk.PhotoImage(file="res/pcbDefect.png")
-root.minsize(1080, 600)
+
+scrWidth = (root.winfo_screenwidth() // 1.5)
+scrHeight = (root.winfo_screenheight() // 1.5)
+
+# img = tk.PhotoImage(file="res/pcbDefect.png")
+root.geometry("%dx%d+%d+%d" % (scrWidth, scrHeight, (scrWidth // 4), (scrHeight // 4)))
 root.resizable(False, False)
 root.title("pcbDefectProj")
-root.iconphoto(False, img)
+# root.iconphoto(False, img)
+
+# Menubar
+menubar = tk.Menu(root)
+
+menu_file = Menu(menubar, tearoff=0)
+menu_file.add_command(label="Close", command=root.quit)
+
+menu_camerasource = tk.Menu(menubar, tearoff=0)
+menu_camerasource.add_radiobutton(label="source1", command='')
+menu_camerasource.add_radiobutton(label="source2", command='')
+menu_camerasource.add_separator()
+menu_camerasource.add_command(label="camera_disable", command='')
+
+
+menu_help = tk.Menu(menubar, tearoff=0)
+menu_help.add_command(label="About...", command='')
+
+menubar.add_cascade(label="File", menu=menu_file)
+menubar.add_cascade(label="Camera Source", menu=menu_camerasource)
+menubar.add_cascade(label="Help", menu=menu_help)
+
+root.config(menu=menubar)
 
 
 # Canvas
-cameraFeed = tk.Canvas(root, borderwidth=2, relief="solid", bg="gray", height=580, width=1060)
+cameraFeed = tk.Canvas(root, borderwidth=2, relief="solid", bg="gray", height=(scrHeight - 20), width=(scrWidth - 20))
 cameraFeed.place(x=5, y=5)
 
 
@@ -58,9 +56,9 @@ cameraFeed.place(x=5, y=5)
 placeholder_camOn = ImageTk.PhotoImage(Image.open("res/camOn.png"))
 placeholder_camOff = ImageTk.PhotoImage(Image.open("res/camOff.png"))
 
-
 # adding image to feed
-display_feed(isCameraOn)
+# display_feed(isCameraOn)
+
 
 """
 # Toggle button
@@ -69,10 +67,8 @@ btnCameraToggle.pack(side="bottom", pady=22.5)
 #
 """
 
-
 # Close Button
-root.protocol("WM_DELETE_WINDOW", close_btn_msgbox)
-
+# root.protocol("WM_DELETE_WINDOW", close_btn_msgbox)
 
 # Run the Tkinter event loop
 root.mainloop()
