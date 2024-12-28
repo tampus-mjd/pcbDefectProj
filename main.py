@@ -133,10 +133,17 @@ menu_properties = Menu(menubar, tearoff=0)
 submenu_cameraSource = Menu(menu_properties, tearoff=0)
 
 for camera_info in enumerate_cameras(cv2.CAP_MSMF):
+    index = camera_info.index
+    name = camera_info.name
+
+    def create_command(index):
+        return lambda: start_camera_feed(index)
+
     submenu_cameraSource.add_radiobutton(
-        label=f'{camera_info.name}',
-        command=lambda index=camera_info.index: start_camera_feed(index)
+        label=name,
+        command=create_command(index)
     )
+
 
 submenu_cameraSource.add_radiobutton(label="camera_disable", command=stop_camera_feed)
 
